@@ -25,13 +25,13 @@
  * DEBUG
  ******************************************************************************/
 #define SEC_DEBUG                   (0)
-#define SMSG
-#define DMSG
 #if SEC_DEBUG
+#define SMSG(fmt, ...) printk(KERN_INFO "[%s] " fmt, MOD, ##__VA_ARGS__)
+#define DMSG(fmt, ...) printk(KERN_INFO "[%s] " fmt, MOD, ##__VA_ARGS__)
 #else
-#define DMSG
+#define SMSG(fmt, ...) do {} while (0)
+#define DMSG(fmt, ...) do {} while (0)
 #endif
-
 /******************************************************************************
  * LOCAL VERIABLE
  ******************************************************************************/
@@ -180,10 +180,7 @@ unsigned int hacc_do_aes(enum aes_ops ops,
 
 	/* make sure size is aligned to aes block size */
 	if ((size % AES_BLK_SZ) != 0) {
-		SMSG("[%s] size = %d is not %d bytes alignment\n",
-		     MOD,
-		     size,
-		     AES_BLK_SZ);
+		SMSG("size = %d is not %d bytes alignment\n", size, AES_BLK_SZ);
 		return ERR_HACC_DATA_UNALIGNED;
 	}
 
